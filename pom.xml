@@ -15,6 +15,7 @@
         <testng.version>6.8.8</testng.version>
         <selenium.version>3.14.0</selenium.version>
         <fuel.version>1.15.0</fuel.version>
+        <klaxon.version>3.0.8</klaxon.version>
     </properties>
 
     <dependencies>
@@ -53,6 +54,12 @@
             <groupId>com.github.kittinunf.fuel</groupId>
             <artifactId>fuel</artifactId>
             <version>${fuel.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>klaxon</artifactId>
+            <version>${klaxon.version}</version>
         </dependency>
     </dependencies>
 

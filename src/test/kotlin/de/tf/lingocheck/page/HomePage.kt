@@ -16,9 +16,14 @@ class HomePage(val driver: WebDriver) : AbstractPage(driver) {
     @FindBy(xpath = ".//button[@type='submit']")
     private val buttonLogin: WebElement? = null
 
+    @FindBy(xpath = ".//input[@type='checkbox']")
+    private val checkBoxKeepLogin: WebElement? = null
+
+
     fun login(): ClassesPage {
         inputName?.sendKeys(getProperties("username"))
         inputPassword?.sendKeys(getProperties("password"))
+        checkBoxKeepLogin?.click()
         buttonLogin?.click()
         return ClassesPage(driver)
     }

@@ -1,5 +1,6 @@
-package de.tf.lingocheck
+package de.tf.lingocheck.test
 
+import de.tf.lingocheck.Pusher
 import org.testng.annotations.Test
 
 class TestFuel {
