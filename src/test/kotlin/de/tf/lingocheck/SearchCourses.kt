@@ -55,7 +55,7 @@ class SearchCourses : TestBase() {
                     ClassCounter.count()
                 }
                 commitPage.isMissingPage() -> {
-                    println("Missing page, lets sleep")
+                    //println("Missing page, lets sleep")
                     Thread.sleep(5000)
                 }
                 commitPage.isCommitPage() -> {
@@ -81,13 +81,14 @@ class SearchCourses : TestBase() {
                 sendBookedCourse(course)
             } else {
                 println("New DE Course: $course")
-                sendNewCourse(course)
+                //sendNewCourse(course)
             }
         }
     }
 
     fun shouldBeBooked(course: Course): Boolean {
-        return course.date.isLaterThan(hours = 72) && (course.isGroupClass() || course.isPrivateClass())
+        return (course.isGroupClass() || course.isPrivateClass()) && course.date.isLaterThan(hours = 72) && Whitelist.contains(
+                course.date)
     }
 
     private fun sendBookedCourse(parseCourse: Course) {

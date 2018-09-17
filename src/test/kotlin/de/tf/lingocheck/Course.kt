@@ -8,7 +8,7 @@ data class Course(val commit: Long, val url: String,
         val classTopic: String?, val classTopicType: String?, val presentationNumber: String?) {
 
     override fun toString(): String {
-        return "$[commit] ${getFormattedDate()} - $classType ($languageLevel): $classTopicType - $classTopic \n $url"
+        return "[$commit] ${getFormattedDate()} - $classType ($languageLevel): $classTopicType - $classTopic \n $url"
     }
 
     fun isGroupClass() = classType?.equals("Group class") ?: false

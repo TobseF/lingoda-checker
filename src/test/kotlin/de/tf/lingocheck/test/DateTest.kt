@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class DateTest() {
+class DateTest {
 
     @Test
     fun parseDateTest() {
