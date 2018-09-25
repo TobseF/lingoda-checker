@@ -21,6 +21,5 @@ fun parseCsv(csv: String): Course {
             classTopicType = values[3],
             languageLevel = values[4],
             presentationNumber = values[5],
-            classTopic = values[6],
-            url = commitUrl)
+            classTopic = values[6], url = commitUrl + values[0])
 }

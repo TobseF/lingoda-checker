@@ -2,10 +2,7 @@ package de.tf.lingocheck
 
 import de.tf.lingocheck.page.ClassCommitPage
 import de.tf.lingocheck.page.HomePage
-import de.tf.lingocheck.util.ClassCounter
-import de.tf.lingocheck.util.TestBase
-import de.tf.lingocheck.util.UtilResources
-import de.tf.lingocheck.util.isLaterThan
+import de.tf.lingocheck.util.*
 import org.testng.annotations.Test
 import java.util.concurrent.TimeUnit
 
@@ -79,8 +76,9 @@ class SearchCourses : TestBase() {
                 commitPage.commit()
                 println("Booked Course: $course")
                 sendBookedCourse(course)
+                BookingHistory.bookCourse(course)
             } else {
-                println("New DE Course: $course")
+                //println("New DE Course: $course")
                 //sendNewCourse(course)
             }
         }
@@ -88,7 +86,7 @@ class SearchCourses : TestBase() {
 
     fun shouldBeBooked(course: Course): Boolean {
         return (course.isGroupClass() || course.isPrivateClass()) && course.date.isLaterThan(hours = 72) && Whitelist.contains(
-                course.date)
+                course.date) && BookingHistory.needsBooking(course)
     }
 
     private fun sendBookedCourse(parseCourse: Course) {
