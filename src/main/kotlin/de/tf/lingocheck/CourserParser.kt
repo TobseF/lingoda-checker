@@ -1,16 +1,32 @@
 package de.tf.lingocheck
 
 import de.tf.lingocheck.page.ClassCommitPage
-import de.tf.lingocheck.util.UtilResources
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-val formatter = SimpleDateFormat("yyyy MMM. dd, HH:mm", Locale.GERMAN)
-val defaultYear = UtilResources.getProperties("currentYear")
+val formatter = SimpleDateFormat("yyyy MMMM. dd, HH:mm", Locale.GERMAN)
 
-fun parseDate(dateAsText: String): Date {
-    return formatter.parse(defaultYear + " " + dateAsText.substringAfter(" "))!!
+fun parseDate(dateAsText: String, defaultYear: String): Date {
+    return formatter.parse(defaultYear + " " + dateAsText.trim().substringAfter(" "))!!
+}
+
+fun parseDate(dateAsText: String, now: Date = Date()): Date {
+    val currentYear = now.year()
+    val nextYear = currentYear + 1
+    val dateA = parseDate(dateAsText, currentYear.toString())
+    val dateB = parseDate(dateAsText, nextYear.toString())
+    return if (dateA.after(now)) {
+        dateA
+    } else {
+        dateB
+    }
+}
+
+fun Date.year(): Int {
+    val cal = Calendar.getInstance()
+    cal.time = this
+    return cal.get(Calendar.YEAR)
 }
 
 fun parseCourse(page: ClassCommitPage, commit: Long, url: String): Course {

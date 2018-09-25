@@ -11,7 +11,9 @@ object BookingHistory {
     private const val bookedFile = "book-history.txt"
 
     init {
-        courses = File(bookedFile).readLines().map { parseCsv(it) }.toMutableList()
+        courses = File(bookedFile).readLines().map {
+            parseCsv(it)
+        }.toMutableList()
     }
 
     fun bookCourse(course: Course) {

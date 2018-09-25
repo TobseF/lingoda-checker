@@ -16,6 +16,6 @@ object UtilResources {
         if (properties == null) {
             loadProperties()
         }
-        return UtilResources.properties?.getProperty(property).toString()
+        return properties?.getProperty(property).toString()
     }
 }

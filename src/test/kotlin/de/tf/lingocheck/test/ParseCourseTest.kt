@@ -1,9 +1,9 @@
 package de.tf.lingocheck.test
 
-import de.tf.lingocheck.mock.mockCourse
 import de.tf.lingocheck.parseCsv
+import de.tf.lingocheck.test.mock.mockCourse
 import de.tf.lingocheck.toCsv
-import org.testng.annotations.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 
 class ParseCourseTest {

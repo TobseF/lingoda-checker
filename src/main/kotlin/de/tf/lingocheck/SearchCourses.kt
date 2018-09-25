@@ -3,42 +3,23 @@ package de.tf.lingocheck
 import de.tf.lingocheck.page.ClassCommitPage
 import de.tf.lingocheck.page.HomePage
 import de.tf.lingocheck.util.*
-import org.testng.annotations.Test
 import java.util.concurrent.TimeUnit
+
 
 class SearchCourses : TestBase() {
 
-    @Test
-    fun findCourses() {
-        val homePage = HomePage(driver)
-        val classesPage = homePage.login()
-
-        val courseLinks = mutableListOf<CourseLink>()
-        for (i in 1..4) {
-            courseLinks.addAll(classesPage.findCoursesLinks())
-            classesPage.buttonNextWeek?.click()
-        }
-
-        val courses = mutableListOf<Course>()
-        for (link in courseLinks) {
-            driver.navigate().to(link.url)
-            courses += parseCourse(ClassCommitPage(driver), link.getCommit(), link.url)
-        }
-
-        if (courses.isEmpty()) {
-            print("No free courses available")
-        }
-        courses.forEach { println(it) }
-    }
-
-    @Test
     fun findCoursesByCommitNumber() {
         HomePage(driver).login()
+        print("Login successful")
 
         val commitUrlBase = UtilResources.getProperties("commitUrl")
 
         Thread.sleep(2000)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
+
+        println("Start Searching Courses")
+
+        var retry = 0
         while (true) {
             val classCounter = ClassCounter.getClassCount()
             val commitUrl = commitUrlBase + classCounter
@@ -48,8 +29,8 @@ class SearchCourses : TestBase() {
 
             when {
                 commitPage.isTakenPage() -> {
-                    // print("Already taken: $commitCounterStart")
-                    ClassCounter.count()
+                    // println("Already taken: $commitCounterStart")
+                    count()
                 }
                 commitPage.isMissingPage() -> {
                     //println("Missing page, lets sleep")
@@ -60,14 +41,24 @@ class SearchCourses : TestBase() {
                     val parseCourse = parseCourse(ClassCommitPage(driver), classCounter, commitUrl)
                     //print("Parsed class: $parseCourse")
                     nextCourse(parseCourse, commitPage)
-                    ClassCounter.count()
+                    count()
                 }
                 else -> {
-                    throw IllegalStateException("Fund unpredicted page: \n" + commitUrl + "\n" + driver.pageSource)
+                    if (retry >= 2) {
+                        retry += 1
+                    } else {
+                        println("Skipped unpredicted page: \n" + commitUrl + "\n" + driver.pageSource)
+                        retry = 0
+                    }
                 }
             }
 
         }
+    }
+
+    private fun count() {
+        ClassCounter.count()
+        println("Next Course to check: " + ClassCounter.getClassCount())
     }
 
     private fun nextCourse(course: Course, commitPage: ClassCommitPage) {
@@ -84,7 +75,7 @@ class SearchCourses : TestBase() {
         }
     }
 
-    fun shouldBeBooked(course: Course): Boolean {
+    private fun shouldBeBooked(course: Course): Boolean {
         return (course.isGroupClass() || course.isPrivateClass()) && course.date.isLaterThan(hours = 72) && Whitelist.contains(
                 course.date) && BookingHistory.needsBooking(course)
     }

@@ -1,7 +1,7 @@
 package de.tf.lingocheck.test
 
 import de.tf.lingocheck.util.ClassCounter
-import org.testng.annotations.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 
 class ClassCounterTest {
