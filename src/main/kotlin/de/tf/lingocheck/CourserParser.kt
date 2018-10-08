@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-val formatter = SimpleDateFormat("yyyy MMMM. dd, HH:mm", Locale.GERMAN)
+val formatter = SimpleDateFormat("yyyy MMMM dd, HH:mm", Locale.GERMAN)
 
 fun parseDate(dateAsText: String, defaultYear: String): Date {
-    return formatter.parse(defaultYear + " " + dateAsText.trim().substringAfter(" "))!!
+    return formatter.parse(defaultYear + " " + dateAsText.replace(".", "").trim().substringAfter(" "))!!
 }
 
 fun parseDate(dateAsText: String, now: Date = Date()): Date {
