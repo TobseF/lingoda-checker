@@ -13,7 +13,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.2.70</kotlin.version>
-        <testng.version>6.8.8</testng.version>
         <junit.version>4.12</junit.version>
         <selenium.version>3.14.0</selenium.version>
         <fuel.version>1.15.0</fuel.version>
@@ -38,12 +37,6 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
         </dependency>
 
         <dependency>
@@ -112,6 +105,15 @@
                                     <mainClass>de.tf.lingocheck.StartKt</mainClass>
                                 </transformer>
                             </transformers>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>junit:junit</exclude>
+                                    <exclude>org.hamcrest:hamcrest-core:</exclude>
+                                    <exclude>org.jetbrains.kotlin:kotlin-reflect</exclude>
+                                    <exclude>log4j:log4j:jar:</exclude>
+                                    <exclude>net.bytebuddy:byte-buddy</exclude>
+                                </excludes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
