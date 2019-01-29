@@ -123,6 +123,10 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>jcenter</id>
             <url>https://jcenter.bintray.com/</url>
         </repository>
