@@ -1,4 +1,4 @@
-package de.tf.lingocheck
+package de.tf.lingocheck.by.api.url
 
 import de.tf.lingocheck.page.ClassCommitPage
 import java.text.SimpleDateFormat
@@ -29,8 +29,8 @@ fun Date.year(): Int {
     return cal.get(Calendar.YEAR)
 }
 
-fun parseCourse(page: ClassCommitPage, commit: Long, url: String): Course {
-    return Course(commit = commit,
+fun parseCourse(page: ClassCommitPage, commit: Long, url: String): ApiCourse {
+    return ApiCourse(commit = commit,
             url = url,
             languageLevel = page.languageLevel.firstOrNull()?.text,
             classType = page.classType.firstOrNull()?.text,

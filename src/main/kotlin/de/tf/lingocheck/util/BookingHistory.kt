@@ -1,13 +1,13 @@
 package de.tf.lingocheck.util
 
-import de.tf.lingocheck.Course
-import de.tf.lingocheck.parseCsv
-import de.tf.lingocheck.toCsv
+import de.tf.lingocheck.api.parseCsv
+import de.tf.lingocheck.api.toCsv
+import de.tf.lingocheck.by.api.url.ApiCourse
 import java.io.File
 import java.io.FileWriter
 
 object BookingHistory {
-    private var courses: MutableList<Course>
+    private var courses: MutableList<ApiCourse>
     private const val bookedFile = "book-history.txt"
 
     init {
@@ -16,14 +16,14 @@ object BookingHistory {
         }.toMutableList()
     }
 
-    fun bookCourse(course: Course) {
+    fun bookCourse(course: ApiCourse) {
         courses.add(course)
         write()
     }
 
-    fun needsBooking(course: Course): Boolean = !isAlreadyBooked(course)
+    fun needsBooking(course: ApiCourse): Boolean = !isAlreadyBooked(course)
 
-    fun isAlreadyBooked(course: Course): Boolean {
+    fun isAlreadyBooked(course: ApiCourse): Boolean {
         return courses.any { course.date == it.date }
     }
 

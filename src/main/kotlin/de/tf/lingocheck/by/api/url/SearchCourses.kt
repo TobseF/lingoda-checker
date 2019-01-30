@@ -1,8 +1,14 @@
-package de.tf.lingocheck
+package de.tf.lingocheck.by.api.url
 
+import de.tf.lingocheck.Pusher
+import de.tf.lingocheck.Whitelist
+import de.tf.lingocheck.api.toCsv
 import de.tf.lingocheck.page.ClassCommitPage
 import de.tf.lingocheck.page.HomePage
 import de.tf.lingocheck.util.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -61,7 +67,7 @@ class SearchCourses : TestBase() {
         println("Next Course to check: " + ClassCounter.getClassCount())
     }
 
-    private fun nextCourse(course: Course, commitPage: ClassCommitPage) {
+    private fun nextCourse(course: ApiCourse, commitPage: ClassCommitPage) {
         if (course.isGerman()) {
             if (shouldBeBooked(course)) {
                 commitPage.commit()
@@ -75,20 +81,22 @@ class SearchCourses : TestBase() {
         }
     }
 
-    private fun shouldBeBooked(course: Course): Boolean {
-        return (course.isGroupClass() || course.isPrivateClass()) && course.date.isLaterThan(hours = 72) && Whitelist.contains(
-                course.date) && BookingHistory.needsBooking(course)
+    private fun shouldBeBooked(course: ApiCourse): Boolean {
+        return (course.isGroupClass() || course.isPrivateClass()) && course.date.isAfter(hours = 72) && Whitelist.contains(
+                course.date.toDateTime()) && BookingHistory.needsBooking(course)
     }
 
-    private fun sendBookedCourse(parseCourse: Course) {
+    fun Date.toDateTime(): LocalDateTime = this.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+    private fun sendBookedCourse(parseCourse: ApiCourse) {
         sendCourse(parseCourse, "Booked-Course")
     }
 
-    private fun sendNewCourse(parseCourse: Course) {
+    private fun sendNewCourse(parseCourse: ApiCourse) {
         sendCourse(parseCourse, "New-Course")
     }
 
-    private fun sendCourse(parseCourse: Course, messageTitle: String) {
+    private fun sendCourse(parseCourse: ApiCourse, messageTitle: String) {
         val pusher = Pusher()
         pusher.send(messageTitle, parseCourse.toCsv())
     }

@@ -1,6 +1,6 @@
 package de.tf.lingocheck.page
 
-import de.tf.lingocheck.SearchCourses
+import de.tf.lingocheck.by.api.url.SearchCourses
 import de.tf.lingocheck.page.element.CourseCard
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver

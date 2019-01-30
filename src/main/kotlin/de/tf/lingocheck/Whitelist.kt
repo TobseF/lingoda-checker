@@ -10,7 +10,8 @@ import java.util.*
 
 object Whitelist {
 
-    val whitelist = mutableSetOf<String>()
+    val whitelist = mutableSetOf<LocalDateTime>()
+
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
 
     private const val counterFile = "calender-whitelist.txt"
@@ -19,11 +20,11 @@ object Whitelist {
         read(File(counterFile).readLines(defaultCharset()))
     }
 
-    fun contains(date: Date): Boolean {
+    fun contains(date: LocalDateTime): Boolean {
         if (whitelist.isEmpty()) {
             read()
         }
-        return whitelist.contains(formatDate(date))
+        return whitelist.contains(date)
     }
 
     fun read(lines: List<String>) {
@@ -55,7 +56,7 @@ object Whitelist {
         val toHours = Duration.between(date1, date2).toHours()
 
         for (hour in 0..toHours) {
-            whitelist += format(date1.plusHours(hour))
+            whitelist += date1.plusHours(hour)
         }
     }
 

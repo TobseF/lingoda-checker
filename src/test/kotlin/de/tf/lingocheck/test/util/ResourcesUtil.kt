@@ -1,4 +1,4 @@
-package de.tf.lingocheck.test
+package de.tf.lingocheck.test.util
 
 import java.net.URL
 import kotlin.reflect.KClass

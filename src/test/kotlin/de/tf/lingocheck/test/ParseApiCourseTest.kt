@@ -1,12 +1,12 @@
 package de.tf.lingocheck.test
 
-import de.tf.lingocheck.parseCsv
+import de.tf.lingocheck.api.parseCsv
+import de.tf.lingocheck.api.toCsv
 import de.tf.lingocheck.test.mock.mockCourse
-import de.tf.lingocheck.toCsv
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ParseCourseTest {
+class ParseApiCourseTest {
 
     @Test
     fun parseCourseTest() {

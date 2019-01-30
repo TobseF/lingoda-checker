@@ -2,6 +2,7 @@ package de.tf.lingocheck.test
 
 import de.tf.lingocheck.page.ClassesPage
 import de.tf.lingocheck.page.element.parseCourseTime
+import de.tf.lingocheck.test.util.getResource
 import de.tf.lingocheck.util.createDriver
 import org.junit.Test
 import java.time.LocalDate

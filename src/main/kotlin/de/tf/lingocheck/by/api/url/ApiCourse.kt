@@ -1,9 +1,9 @@
-package de.tf.lingocheck
+package de.tf.lingocheck.by.api.url
 
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class Course(val commit: Long, val url: String,
+data class ApiCourse(val commit: Long, val url: String,
         val languageLevel: String?, val classType: String?, val date: Date,
         val classTopic: String?, val classTopicType: String?, val presentationNumber: String?) {
 

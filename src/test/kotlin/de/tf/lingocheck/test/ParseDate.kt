@@ -1,6 +1,6 @@
 package de.tf.lingocheck.test
 
-import de.tf.lingocheck.parseDate
+import de.tf.lingocheck.by.api.url.parseDate
 import org.junit.Test
 import java.text.SimpleDateFormat
 import java.util.*
