@@ -3,7 +3,6 @@ package de.tf.lingocheck
 import de.tf.lingocheck.page.ClassesPage
 import de.tf.lingocheck.page.HomePage
 import de.tf.lingocheck.util.TestBase
-import java.time.LocalDate
 
 
 class SearchCoursesInCalendar : TestBase() {
@@ -14,12 +13,15 @@ class SearchCoursesInCalendar : TestBase() {
 
         val classesPage = ClassesPage(driver)
 
-
-        val date = LocalDate.of(2019, 1, 28)
-        val courses = classesPage.findCourses(date)
-
-
         val weeks = listBookingWeeks(Whitelist.getUnbooked())
+        val firstWeek = weeks.first()
+
+        val date = firstWeek.start
+        val courses = classesPage.findCoursesByDays(date)
+
+        val coursesTooBook = courses.filter { course -> firstWeek.contains(course.date) }
+                .filter { course -> Whitelist.containsUnbooked(course.date) }
+        println(coursesTooBook)
     }
 
 

@@ -18,6 +18,7 @@ object Whitelist {
     private const val counterFile = "calender-whitelist.txt"
 
     fun getUnbooked(): List<LocalDateTime> {
+        readIfEmpty()
         return whitelist.filter { !BookingHistory.isAlreadyBooked(it) }
     }
 
@@ -25,11 +26,19 @@ object Whitelist {
         read(File(counterFile).readLines(defaultCharset()))
     }
 
+    fun containsUnbooked(date: LocalDateTime): Boolean {
+        return getUnbooked().contains(date)
+    }
+
     fun contains(date: LocalDateTime): Boolean {
+        readIfEmpty()
+        return whitelist.contains(date)
+    }
+
+    private fun readIfEmpty() {
         if (whitelist.isEmpty()) {
             read()
         }
-        return whitelist.contains(date)
     }
 
     fun read(lines: List<String>) {
