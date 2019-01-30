@@ -13,9 +13,13 @@ class SearchCoursesInCalendar : TestBase() {
         print("Login successful")
 
         val classesPage = ClassesPage(driver)
+
+
         val date = LocalDate.of(2019, 1, 28)
         val courses = classesPage.findCourses(date)
-        println(courses)
+
+
+        val weeks = listBookingWeeks(Whitelist.getUnbooked())
     }
 
 

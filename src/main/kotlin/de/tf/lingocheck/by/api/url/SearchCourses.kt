@@ -5,7 +5,10 @@ import de.tf.lingocheck.Whitelist
 import de.tf.lingocheck.api.toCsv
 import de.tf.lingocheck.page.ClassCommitPage
 import de.tf.lingocheck.page.HomePage
-import de.tf.lingocheck.util.*
+import de.tf.lingocheck.util.BookingHistory
+import de.tf.lingocheck.util.ClassCounter
+import de.tf.lingocheck.util.TestBase
+import de.tf.lingocheck.util.UtilResources
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
@@ -82,8 +85,8 @@ class SearchCourses : TestBase() {
     }
 
     private fun shouldBeBooked(course: ApiCourse): Boolean {
-        return (course.isGroupClass() || course.isPrivateClass()) && course.date.isAfter(hours = 72) && Whitelist.contains(
-                course.date.toDateTime()) && BookingHistory.needsBooking(course)
+        return (course.isGroupClass() || course.isPrivateClass()) && course.date.isAfter(course.date.plusHours(72)) && Whitelist.contains(
+                course.date) && BookingHistory.needsBooking(course)
     }
 
     fun Date.toDateTime(): LocalDateTime = this.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()

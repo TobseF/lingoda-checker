@@ -2,7 +2,8 @@ package de.tf.lingocheck.test
 
 import de.tf.lingocheck.by.api.url.parseDate
 import org.junit.Test
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -34,8 +35,8 @@ class ParseDateTest {
         assertEquals("01.03 14:00 2019".toDateDe(), parseDate("Fr., März 01, 14:00", now))
     }
 
-    private fun String.toDateDe(): Date {
-        val sampleDate = SimpleDateFormat("dd.MM HH:mm yyyy", Locale.GERMAN)
-        return sampleDate.parse(this)!!
+    private fun String.toDateDe(): LocalDateTime {
+        val formatter = DateTimeFormatter.ofPattern("dd.MM HH:mm yyyy", Locale.GERMAN)
+        return LocalDateTime.parse(this, formatter)
     }
 }

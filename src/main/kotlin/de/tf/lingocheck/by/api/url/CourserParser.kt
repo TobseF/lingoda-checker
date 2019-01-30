@@ -1,22 +1,24 @@
 package de.tf.lingocheck.by.api.url
 
 import de.tf.lingocheck.page.ClassCommitPage
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-val formatter = SimpleDateFormat("yyyy MMMM dd, HH:mm", Locale.GERMAN)
+val formatter = DateTimeFormatter.ofPattern("yyyy MMMM dd, HH:mm", Locale.GERMAN)
 
-fun parseDate(dateAsText: String, defaultYear: String): Date {
-    return formatter.parse(defaultYear + " " + dateAsText.replace(".", "").trim().substringAfter(" "))!!
+fun parseDate(dateAsText: String, defaultYear: String): LocalDateTime {
+    val year = defaultYear + " " + dateAsText.replace(".", "").trim().substringAfter(" ")
+    return LocalDateTime.parse(year, formatter)!!
 }
 
-fun parseDate(dateAsText: String, now: Date = Date()): Date {
-    val currentYear = now.year()
+fun parseDate(dateAsText: String, now: LocalDateTime = LocalDateTime.now()): LocalDateTime {
+    val currentYear = now.year
     val nextYear = currentYear + 1
     val dateA = parseDate(dateAsText, currentYear.toString())
     val dateB = parseDate(dateAsText, nextYear.toString())
-    return if (dateA.after(now)) {
+    return if (dateA.isAfter(now)) {
         dateA
     } else {
         dateB

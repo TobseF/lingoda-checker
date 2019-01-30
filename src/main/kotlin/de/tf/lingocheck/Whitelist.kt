@@ -1,5 +1,6 @@
 package de.tf.lingocheck
 
+import de.tf.lingocheck.util.BookingHistory
 import java.io.File
 import java.nio.charset.Charset.defaultCharset
 import java.time.Duration
@@ -10,11 +11,15 @@ import java.util.*
 
 object Whitelist {
 
-    val whitelist = mutableSetOf<LocalDateTime>()
+    val whitelist = sortedSetOf<LocalDateTime>()
 
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
 
     private const val counterFile = "calender-whitelist.txt"
+
+    fun getUnbooked(): List<LocalDateTime> {
+        return whitelist.filter { !BookingHistory.isAlreadyBooked(it) }
+    }
 
     private fun read() {
         read(File(counterFile).readLines(defaultCharset()))

@@ -1,13 +1,9 @@
 package de.tf.lingocheck.test.mock
 
 import de.tf.lingocheck.by.api.url.ApiCourse
-import java.text.SimpleDateFormat
-import java.util.*
+import de.tf.lingocheck.test.util.toDate
 
-private val sampleDate = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN)
-
-fun mockCourse() = ApiCourse(commit = 779390L,
-        date = sampleDate.parse("21.11.2018 15:00"),
+fun mockCourse() = ApiCourse(commit = 779390L, date = "21.11.2018 15:00".toDate(),
         url = "https://teacher.lingoda.com/teacher/classes/commit/779390",
         classTopicType = "Speaking",
         classTopic = "A conversation about shopping and spending money",
