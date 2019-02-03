@@ -1,7 +1,7 @@
 package de.tf.lingocheck
 
 import com.github.kittinunf.fuel.Fuel
-import de.tf.lingocheck.util.UtilResources
+import de.tf.lingocheck.util.Configs
 
 class Pusher {
 
@@ -9,8 +9,8 @@ class Pusher {
     private val url: String
 
     init {
-        authorization = UtilResources.getProperties("authorization")
-        url = UtilResources.getProperties("pusherUrl")
+        authorization = Configs.getProperty("authorization")
+        url = Configs.getProperty("pusherUrl")
     }
 
     fun send(title: String, body: String): Int {

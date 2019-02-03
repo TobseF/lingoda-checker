@@ -5,14 +5,13 @@ import java.net.URI
 
 abstract class TestBase {
 
-    protected var driver: WebDriver
+    protected var driver: WebDriver = createDriver()
 
     init {
-        driver = createDriver()
-        driver.get(URI(UtilResources.getProperties("pageURL")).toString())
+        driver.get(URI(Configs.getProperty("pageURL")).toString())
     }
 
-    fun driverClose() {
+    fun closeDriver() {
         driver.close()
     }
 }

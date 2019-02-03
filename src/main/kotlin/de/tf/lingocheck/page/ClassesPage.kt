@@ -9,10 +9,13 @@ import org.openqa.selenium.support.FindBy
 import java.time.LocalDate
 
 
-class ClassesPage(private val driver: WebDriver) : AbstractPage(driver) {
-
+class ClassesPage(driver: WebDriver) : AbstractPage(driver) {
     @FindBy(xpath = "//a[@title=\"Next week\"]")
     val buttonNextWeek: WebElement? = null
+
+    fun getUserName(): String {
+        return findBy(xPath = "//a[@class='navigation-profile resposelect-wrapper ng-scope']").text
+    }
 
     fun findCoursesLinks(): List<SearchCourses.CourseLink> {
         val freeCardElements = driver.findElements(By.ByXPath.xpath("//a[starts-with(@href, \"/teacher/classes/commit/\")]"))
@@ -21,7 +24,7 @@ class ClassesPage(private val driver: WebDriver) : AbstractPage(driver) {
     }
 
     fun findCourses(date: LocalDate): List<CourseCard> {
-        return driver.findElements(groupClassOrPrivateClass()).map { CourseCard(it, date) }
+        return driver.findElements(groupClassOrPrivateClass()).map { CourseCard(it, driver, date) }
     }
 
     fun findCoursesByDays(date: LocalDate): List<CourseCard> {
@@ -34,7 +37,8 @@ class ClassesPage(private val driver: WebDriver) : AbstractPage(driver) {
     }
 
     fun findCoursesOnDay(day: Int, date: LocalDate): List<CourseCard> {
-        return driver.findElements(By.ByXPath(getGroupClassOrPrivateClassOnDay(day))).map { CourseCard(it, date) }
+        return driver.findElements(By.ByXPath(getGroupClassOrPrivateClassOnDay(day)))
+                .map { CourseCard(it, driver, date) }
     }
 
     private fun groupClassOrPrivateClass() = By.ByXPath("//section[@class='calendar available-classes']/${getGroupClassOrPrivateClass()}")
@@ -51,16 +55,20 @@ class ClassesPage(private val driver: WebDriver) : AbstractPage(driver) {
         return SearchCourses.CourseLink(url = card.getAttribute("href"), topic = card.getAttribute("data-tooltip"))
     }
 
-    fun getDateFromUrl() = PageUrl(driver.currentUrl).getDate()
+    fun getDateFromUrl() = PageUrl.getDate(driver.currentUrl)
 
-    class PageUrl(val url: String) {
 
-        fun getDate(): LocalDate {
+    class PageUrl {
 
-            val datePart = url.substringAfter("/classes/").substringBefore("?")
-            val dateValues = datePart.split("-").map { it.toInt() }
-            val date = LocalDate.of(dateValues[0], dateValues[1], dateValues[2])
-            return date
+        companion object {
+
+            fun getDate(url: String): LocalDate {
+
+                val datePart = url.substringAfter("/classes/").substringBefore("?")
+                val dateValues = datePart.split("-").map { it.toInt() }
+                val date = LocalDate.of(dateValues[0], dateValues[1], dateValues[2])
+                return date
+            }
         }
     }
 }

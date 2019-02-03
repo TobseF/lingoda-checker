@@ -1,6 +1,7 @@
 package de.tf.lingocheck.page.element
 
 import org.openqa.selenium.By
+import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -8,7 +9,7 @@ import java.time.LocalDateTime
 /** A course calendar page which displays seven days, beginning with the #startDay
  * @param startDay first day of this course card.
  */
-class CourseCard(webElement: WebElement, startDay: LocalDate) {
+class CourseCard(webElement: WebElement, driver: WebDriver, startDay: LocalDate) : Component(webElement, driver) {
 
     val type: String  by lazy {
         webElement.findElement(By.xpath("a//h3"))?.text!!
@@ -16,6 +17,10 @@ class CourseCard(webElement: WebElement, startDay: LocalDate) {
 
     val topic: String by lazy {
         webElement.findElement(By.xpath("a"))?.getAttribute("data-tooltip")!!
+    }
+
+    private val action: WebElement by lazy {
+        webElement.findElement(By.xpath("a"))!!
     }
 
     val classTime: String by lazy {
@@ -32,6 +37,19 @@ class CourseCard(webElement: WebElement, startDay: LocalDate) {
 
     override fun toString(): String {
         return "Course($date: $type - $topic ($bookingLink)"
+    }
+
+    fun commit() {
+        action.click()
+        getCommitButton().click()
+    }
+
+    fun getCommitButton(): WebElement {
+        return driver.findElement(By.xpath("//button[text()='Commit']"))
+    }
+
+    fun getCancelButton(): WebElement {
+        return driver.findElement(By.xpath("a[@data-dismiss='modal' and text()='Cancel']"))
     }
 
 }

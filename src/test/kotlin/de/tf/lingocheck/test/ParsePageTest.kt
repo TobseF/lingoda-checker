@@ -38,9 +38,9 @@ class ParsePageTest {
 
     @Test
     fun pageUrlTest() {
-        val date = ClassesPage.PageUrl("teacher.lingoda.com/teacher/classes/2019-01-28").getDate()
+        val date = ClassesPage.PageUrl.getDate("teacher.lingoda.com/teacher/classes/2019-01-28")
         assertEquals(LocalDate.of(2019, 1, 28), date)
-        val date2 = ClassesPage.PageUrl("teacher.lingoda.com/teacher/classes/2019-01-28?from=prev").getDate()
+        val date2 = ClassesPage.PageUrl.getDate("teacher.lingoda.com/teacher/classes/2019-01-28?from=prev")
         assertEquals(LocalDate.of(2019, 1, 28), date2)
     }
 

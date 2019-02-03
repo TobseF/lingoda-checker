@@ -7,8 +7,8 @@ import de.tf.lingocheck.page.ClassCommitPage
 import de.tf.lingocheck.page.HomePage
 import de.tf.lingocheck.util.BookingHistory
 import de.tf.lingocheck.util.ClassCounter
+import de.tf.lingocheck.util.Configs
 import de.tf.lingocheck.util.TestBase
-import de.tf.lingocheck.util.UtilResources
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
@@ -21,7 +21,7 @@ class SearchCourses : TestBase() {
         HomePage(driver).login()
         print("Login successful")
 
-        val commitUrlBase = UtilResources.getProperties("commitUrl")
+        val commitUrlBase = Configs.getProperty("commitUrl")
 
         Thread.sleep(2000)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)

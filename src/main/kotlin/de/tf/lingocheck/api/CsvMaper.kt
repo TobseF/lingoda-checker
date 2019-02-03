@@ -1,7 +1,7 @@
 package de.tf.lingocheck.api
 
 import de.tf.lingocheck.by.api.url.ApiCourse
-import de.tf.lingocheck.util.UtilResources
+import de.tf.lingocheck.util.Configs
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -16,7 +16,7 @@ private val dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.
 fun parseCsv(csv: String): ApiCourse {
 
     val values = csv.split(";")
-    val commitUrl = UtilResources.getProperties("commitUrl")
+    val commitUrl = Configs.getProperty("commitUrl")
     return ApiCourse(commit = values[0].toLong(), date = LocalDateTime.parse(values[1], dateFormat),
             classType = values[2],
             classTopicType = values[3],
