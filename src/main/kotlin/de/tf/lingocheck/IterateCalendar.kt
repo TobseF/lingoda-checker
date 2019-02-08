@@ -2,10 +2,10 @@ package de.tf.lingocheck
 
 import de.tf.lingocheck.by.api.url.ApiCourse
 import de.tf.lingocheck.by.api.url.SearchCourses
+import de.tf.lingocheck.by.api.url.TestBase
 import de.tf.lingocheck.by.api.url.parseCourse
 import de.tf.lingocheck.page.ClassCommitPage
 import de.tf.lingocheck.page.HomePage
-import de.tf.lingocheck.util.TestBase
 
 class IterateCalendar : TestBase() {
 

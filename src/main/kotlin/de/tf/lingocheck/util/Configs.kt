@@ -14,4 +14,18 @@ object Configs {
     fun getProperty(property: String): String {
         return properties.getProperty(property).toString()
     }
+
+    val teacherUrl: String by lazy { getProperty("teacherUrl") }
+
+    val username: String by lazy { getProperty("username") }
+    val password: String by lazy { getProperty("password") }
+
+    val pusherUrl: String by lazy { getProperty("pusherUrl") }
+    val authorization: String by lazy { getProperty("authorization") }
+
+    val pageURL: String by lazy { getProperty("pageURL") }
+    val nameDriver: String by lazy { getProperty("nameDriver") }
+    val exeDriver: String by lazy { getProperty("exeDriver") }
+    val pathDriver: String by lazy { getProperty("pathDriver") }
+    val commitUrl: String by lazy { getProperty("commitUrl") }
 }

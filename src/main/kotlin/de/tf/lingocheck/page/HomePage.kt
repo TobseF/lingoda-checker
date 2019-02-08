@@ -1,6 +1,6 @@
 package de.tf.lingocheck.page
 
-import de.tf.lingocheck.util.Configs.getProperty
+import de.tf.lingocheck.util.Configs
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
@@ -21,8 +21,8 @@ class HomePage(driver: WebDriver) : AbstractPage(driver) {
 
 
     fun login(): ClassesPage {
-        inputName?.sendKeys(getProperty("username"))
-        inputPassword?.sendKeys(getProperty("password"))
+        inputName?.sendKeys(Configs.username)
+        inputPassword?.sendKeys(Configs.password)
         checkBoxKeepLogin?.click()
         buttonLogin?.click()
         return ClassesPage(driver)

@@ -4,8 +4,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 import java.util.concurrent.TimeUnit
 
 fun createDriver(): ChromeDriver {
-    System.setProperty(Configs.getProperty("nameDriver"),
-            Configs.getProperty("pathDriver") + Configs.getProperty("exeDriver"))
+    System.setProperty(Configs.nameDriver, Configs.pathDriver + Configs.exeDriver)
     //.setBinary(getProperty("chromeDriverExe"))
     //ChromeOptions().setHeadless(true)
     val chromeDriver = ChromeDriver()

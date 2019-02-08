@@ -13,7 +13,7 @@ open class Week(start: LocalDate) {
         fun getWeek(date: LocalDate): LocalDate = date.minusDays(date.dayOfWeek.value - 1L)
     }
 
-    fun urlDate() = DateTimeFormatter.ofPattern("yyyy-MM-DD").format(start)
+    fun urlDate() = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(start)
 
     fun last() = start.plusDays(6)
 
@@ -43,7 +43,7 @@ open class Week(start: LocalDate) {
 
 fun listBookingWeeks(dates: Collection<LocalDateTime>): List<BookingWeek> {
     return listWeeks(dates).map { week ->
-        BookingWeek(week, dates.filter { date -> week.contains(date) })
+        BookingWeek(week, dates.filter { date -> week.contains(date) }.toMutableList())
     }
 }
 

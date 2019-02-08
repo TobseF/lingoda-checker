@@ -1,42 +1,83 @@
 package de.tf.lingocheck
 
+import de.tf.lingocheck.by.api.url.Course
 import de.tf.lingocheck.page.ClassesPage
 import de.tf.lingocheck.page.HomePage
+import de.tf.lingocheck.page.element.CourseCard
+import de.tf.lingocheck.util.BookingHistoryCourse
 import de.tf.lingocheck.util.Configs
-import de.tf.lingocheck.util.TestBase
+import de.tf.lingocheck.util.createDriver
+import org.openqa.selenium.WebDriver
 
 
-class SearchCoursesInCalendar : TestBase() {
+class SearchCoursesInCalendar {
 
     fun findCoursesByCalendar() {
-        val classesPageAfterLogin = HomePage(driver).login()
-        println("Login successful")
-        println("Hallo " + classesPageAfterLogin.getUserName())
-
 
         val weeks = listBookingWeeks(Whitelist.getUnbooked())
-        val firstWeek = weeks.first()
-        val date = firstWeek.start
 
-        openPage(getDateUrl(firstWeek))
+        val courses = weeks.map { CourseSearch(it) }.toMutableList()
 
-        val classesPage = ClassesPage(driver)
-        val courses = classesPage.findCoursesByDays(date)
-        val coursesTooBook = courses.filter { course -> firstWeek.contains(course.date) }
-                .filter { course -> Whitelist.containsUnbooked(course.date) }
-        coursesTooBook.forEach { it.commit() }
-
-        println(coursesTooBook)
+        while (courses.isNotEmpty()) {
+            courses.forEach { course ->
+                course.apply {
+                    searchCourses()
+                    refresh()
+                }
+            }
+            courses.removeIf { it.hasNoCoursesToBook() }
+        }
     }
 
-    fun openPage(url: String) {
-        driver.get(url)
-    }
+    class CourseSearch(val week: BookingWeek) {
+        var driver: WebDriver = createDriver()
+        var loggedIn = false
 
-    private fun getDateUrl(firstWeek: BookingWeek): String {
-        val teacherUrl = Configs.getProperty("teacherURL")
-        val classesUrl = teacherUrl + "classes/"
-        return classesUrl + firstWeek.urlDate()
+        init {
+            driver.get(Configs.pageURL)
+        }
+
+        fun searchCourses() {
+            if (!loggedIn) {
+                login()
+            }
+            val classesPage = ClassesPage(driver)
+            val courses = classesPage.findCoursesByDays(week.start)
+            val coursesTooBook = courses.filter(this::isCourseToBook)
+            coursesTooBook.forEach { bookCourse(it) }
+            println(coursesTooBook)
+        }
+
+        fun hasNoCoursesToBook() = week.courses.isEmpty()
+
+        fun bookCourse(course: CourseCard) {
+            course.commit()
+            BookingHistoryCourse.bookCourse(course.toCourse())
+            week.courses.remove(course.date)
+        }
+
+        private fun CourseCard.toCourse() = Course(date = date, classTopic = topic, classType = type)
+
+        private fun isCourseToBook(course: CourseCard) = course.isInWeek() && course.isOnCourseList()
+
+        fun CourseCard.isInWeek() = week.contains(this.date)
+
+        fun CourseCard.isOnCourseList() = Whitelist.containsUnbooked(this.date)
+
+        fun close() {
+            driver.close()
+        }
+
+        fun refresh() = driver.navigate().refresh()
+
+        fun login() {
+            val classesPageAfterLogin = HomePage(driver).login()
+            println("Login successful")
+            println("Hallo " + classesPageAfterLogin.getUserName())
+            driver.navigate().to(week.getDateUrl())
+            loggedIn = true
+        }
+
     }
 
 

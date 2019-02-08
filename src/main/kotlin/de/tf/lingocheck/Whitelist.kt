@@ -1,6 +1,6 @@
 package de.tf.lingocheck
 
-import de.tf.lingocheck.util.BookingHistory
+import de.tf.lingocheck.util.BookingHistoryCourse
 import java.io.File
 import java.nio.charset.Charset.defaultCharset
 import java.time.Duration
@@ -19,7 +19,7 @@ object Whitelist {
 
     fun getUnbooked(): List<LocalDateTime> {
         readIfEmpty()
-        return whitelist.filter { !BookingHistory.isAlreadyBooked(it) }
+        return whitelist.filter { date -> !BookingHistoryCourse.isAlreadyBooked(date) }
     }
 
     private fun read() {

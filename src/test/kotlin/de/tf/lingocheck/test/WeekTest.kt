@@ -39,15 +39,19 @@ class WeekTest {
 
     @Test
     fun weekUrlTest() {
-        val date = LocalDate.of(2019, 1, 28)
-        val week = Week(date)
+        val week = Week(LocalDate.of(2019, 1, 28))
         assertEquals("2019-01-28", week.urlDate())
     }
 
     @Test
+    fun weekDateTest() {
+        val week = Week(LocalDate.of(2019, 2, 25))
+        assertEquals("2019-02-25", week.urlDate())
+    }
+
+    @Test
     fun weekTest() {
-        val date = LocalDate.of(2019, 1, 28)
-        val week = Week(date)
+        val week = Week(LocalDate.of(2019, 1, 28))
 
         assertTrue(week.contains(LocalDate.of(2019, 1, 28)))
         assertTrue(week.contains(LocalDate.of(2019, 1, 29)))

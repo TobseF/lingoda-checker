@@ -9,8 +9,8 @@ class Pusher {
     private val url: String
 
     init {
-        authorization = Configs.getProperty("authorization")
-        url = Configs.getProperty("pusherUrl")
+        authorization = Configs.authorization
+        url = Configs.pusherUrl
     }
 
     fun send(title: String, body: String): Int {

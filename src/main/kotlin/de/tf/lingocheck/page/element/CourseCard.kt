@@ -19,6 +19,9 @@ class CourseCard(webElement: WebElement, driver: WebDriver, startDay: LocalDate)
         webElement.findElement(By.xpath("a"))?.getAttribute("data-tooltip")!!
     }
 
+    /**
+     * Link which open the course commit dialog
+     */
     private val action: WebElement by lazy {
         webElement.findElement(By.xpath("a"))!!
     }

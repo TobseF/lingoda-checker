@@ -1,30 +1,28 @@
 package de.tf.lingocheck.util
 
-import de.tf.lingocheck.api.parseCsv
-import de.tf.lingocheck.api.toCsv
-import de.tf.lingocheck.by.api.url.ApiCourse
+import de.tf.lingocheck.by.api.url.BookedCourse
 import java.io.File
 import java.io.FileWriter
 import java.time.LocalDateTime
 
-object BookingHistory {
-    private var courses: MutableList<ApiCourse>
-    private const val bookedFile = "book-history.txt"
+open class BookingHistory<T : BookedCourse>(val parser: (String) -> T, val writer: (T) -> String) {
+    private var courses: MutableList<T>
+    private val bookedFile = "book-history.txt"
 
     init {
         courses = File(bookedFile).readLines().map {
-            parseCsv(it)
+            parser.invoke(it)
         }.toMutableList()
     }
 
-    fun bookCourse(course: ApiCourse) {
+    fun bookCourse(course: T) {
         courses.add(course)
         write()
     }
 
-    fun needsBooking(course: ApiCourse): Boolean = !isAlreadyBooked(course)
+    fun needsBooking(course: T): Boolean = !isAlreadyBooked(course)
 
-    fun isAlreadyBooked(course: ApiCourse): Boolean {
+    fun isAlreadyBooked(course: T): Boolean {
         return isAlreadyBooked(course.date)
     }
 
@@ -35,7 +33,7 @@ object BookingHistory {
     private fun write() {
         courses.sortBy { it.date }
         val fileWriter = FileWriter(File(bookedFile))
-        courses.forEach { fileWriter.appendln(it.toCsv()) }
+        courses.forEach { fileWriter.appendln(writer.invoke(it)) }
         fileWriter.close()
     }
 

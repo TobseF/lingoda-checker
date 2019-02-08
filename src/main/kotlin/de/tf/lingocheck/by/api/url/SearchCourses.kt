@@ -2,16 +2,12 @@ package de.tf.lingocheck.by.api.url
 
 import de.tf.lingocheck.Pusher
 import de.tf.lingocheck.Whitelist
-import de.tf.lingocheck.api.toCsv
+import de.tf.lingocheck.api.CsvMaperApiCourse
 import de.tf.lingocheck.page.ClassCommitPage
 import de.tf.lingocheck.page.HomePage
-import de.tf.lingocheck.util.BookingHistory
+import de.tf.lingocheck.util.BookingHistoryApi
 import de.tf.lingocheck.util.ClassCounter
 import de.tf.lingocheck.util.Configs
-import de.tf.lingocheck.util.TestBase
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -21,7 +17,7 @@ class SearchCourses : TestBase() {
         HomePage(driver).login()
         print("Login successful")
 
-        val commitUrlBase = Configs.getProperty("commitUrl")
+        val commitUrlBase = Configs.commitUrl
 
         Thread.sleep(2000)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
@@ -76,7 +72,7 @@ class SearchCourses : TestBase() {
                 commitPage.commit()
                 println("Booked Course: $course")
                 sendBookedCourse(course)
-                BookingHistory.bookCourse(course)
+                BookingHistoryApi.bookCourse(course)
             } else {
                 //println("New DE Course: $course")
                 //sendNewCourse(course)
@@ -86,10 +82,8 @@ class SearchCourses : TestBase() {
 
     private fun shouldBeBooked(course: ApiCourse): Boolean {
         return (course.isGroupClass() || course.isPrivateClass()) && course.date.isAfter(course.date.plusHours(72)) && Whitelist.contains(
-                course.date) && BookingHistory.needsBooking(course)
+                course.date) && BookingHistoryApi.needsBooking(course)
     }
-
-    fun Date.toDateTime(): LocalDateTime = this.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
     private fun sendBookedCourse(parseCourse: ApiCourse) {
         sendCourse(parseCourse, "Booked-Course")
@@ -101,7 +95,7 @@ class SearchCourses : TestBase() {
 
     private fun sendCourse(parseCourse: ApiCourse, messageTitle: String) {
         val pusher = Pusher()
-        pusher.send(messageTitle, parseCourse.toCsv())
+        pusher.send(messageTitle, CsvMaperApiCourse.toCsv(parseCourse))
     }
 
     data class CourseLink(val url: String, val topic: String) {
