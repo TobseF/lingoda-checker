@@ -3,6 +3,7 @@ package de.tf.lingocheck.page
 import de.tf.lingocheck.by.api.url.SearchCourses
 import de.tf.lingocheck.page.element.CourseCard
 import org.openqa.selenium.By
+import org.openqa.selenium.By.ByXPath.xpath
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
@@ -18,7 +19,7 @@ class ClassesPage(driver: WebDriver) : AbstractPage(driver) {
     }
 
     fun findCoursesLinks(): List<SearchCourses.CourseLink> {
-        val freeCardElements = driver.findElements(By.ByXPath.xpath("//a[starts-with(@href, \"/teacher/classes/commit/\")]"))
+        val freeCardElements = driver.findElements(xpath("//a[starts-with(@href, \"/teacher/classes/commit/\")]"))
 
         return freeCardElements.map { parseCard(it) }.toList()
     }
@@ -66,8 +67,7 @@ class ClassesPage(driver: WebDriver) : AbstractPage(driver) {
 
                 val datePart = url.substringAfter("/classes/").substringBefore("?")
                 val dateValues = datePart.split("-").map { it.toInt() }
-                val date = LocalDate.of(dateValues[0], dateValues[1], dateValues[2])
-                return date
+                return LocalDate.of(dateValues[0], dateValues[1], dateValues[2])
             }
         }
     }

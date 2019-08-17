@@ -45,12 +45,12 @@ class SearchCoursesInCalendar {
             val courses = classesPage.findCoursesByDays(week.start)
             val coursesTooBook = courses.filter(this::isCourseToBook)
             coursesTooBook.forEach { bookCourse(it) }
-            println(coursesTooBook)
         }
 
         fun hasNoCoursesToBook() = week.courses.isEmpty()
 
-        fun bookCourse(course: CourseCard) {
+        private fun bookCourse(course: CourseCard) {
+            println("Booking course: $course")
             course.commit()
             BookingHistoryCourse.bookCourse(course.toCourse())
             week.courses.remove(course.date)
@@ -60,9 +60,9 @@ class SearchCoursesInCalendar {
 
         private fun isCourseToBook(course: CourseCard) = course.isInWeek() && course.isOnCourseList()
 
-        fun CourseCard.isInWeek() = week.contains(this.date)
+        private fun CourseCard.isInWeek() = week.contains(this.date)
 
-        fun CourseCard.isOnCourseList() = Whitelist.containsUnbooked(this.date)
+        private fun CourseCard.isOnCourseList() = Whitelist.containsUnbooked(this.date)
 
         fun close() {
             driver.close()
@@ -70,7 +70,7 @@ class SearchCoursesInCalendar {
 
         fun refresh() = driver.navigate().refresh()
 
-        fun login() {
+        private fun login() {
             val classesPageAfterLogin = HomePage(driver).login()
             println("Login successful")
             println("Hallo " + classesPageAfterLogin.getUserName())

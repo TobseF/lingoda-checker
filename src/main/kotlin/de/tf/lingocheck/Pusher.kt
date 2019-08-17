@@ -5,13 +5,8 @@ import de.tf.lingocheck.util.Configs
 
 class Pusher {
 
-    private val authorization: String
-    private val url: String
-
-    init {
-        authorization = Configs.authorization
-        url = Configs.pusherUrl
-    }
+    private val authorization: String = Configs.authorization
+    private val url: String = Configs.pusherUrl
 
     fun send(title: String, body: String): Int {
         return Fuel.post(url).body(jsonData(title, body)).header(mapOf("Content-Type" to "application/json"))

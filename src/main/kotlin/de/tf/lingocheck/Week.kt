@@ -13,9 +13,9 @@ open class Week(start: LocalDate) {
         fun getWeek(date: LocalDate): LocalDate = date.minusDays(date.dayOfWeek.value - 1L)
     }
 
-    fun urlDate() = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(start)
+    fun urlDate(): String = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(start)
 
-    fun last() = start.plusDays(6)
+    fun last(): LocalDate = start.plusDays(6)
 
     fun contains(date: LocalDate) = date == start || date == last() || (date.isAfter(start) && date.isBefore(last()))
 

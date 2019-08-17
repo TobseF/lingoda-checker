@@ -11,8 +11,9 @@ object Configs {
         return Properties().also { it.load(FileInputStream("config.properties")) }
     }
 
-    fun getProperty(property: String): String {
-        return properties.getProperty(property).toString()
+    fun getProperty(propertyKey: String): String {
+        return properties.getProperty(propertyKey)
+                ?: throw IllegalStateException("Failed finding property `$propertyKey`")
     }
 
     val teacherUrl: String by lazy { getProperty("teacherUrl") }

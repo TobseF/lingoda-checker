@@ -12,26 +12,26 @@ import java.time.LocalDateTime
 class CourseCard(webElement: WebElement, driver: WebDriver, startDay: LocalDate) : Component(webElement, driver) {
 
     val type: String  by lazy {
-        webElement.findElement(By.xpath("a//h3"))?.text!!
+        webElement.findElement(By.xpath("a//h3")).text
     }
 
     val topic: String by lazy {
-        webElement.findElement(By.xpath("a"))?.getAttribute("data-tooltip")!!
+        webElement.findElement(By.xpath("a")).getAttribute("data-tooltip")
     }
 
     /**
      * Link which open the course commit dialog
      */
     private val action: WebElement by lazy {
-        webElement.findElement(By.xpath("a"))!!
+        webElement.findElement(By.xpath("a"))
     }
 
     val classTime: String by lazy {
-        webElement.findElement(By.xpath("a//strong[@class='class-time']"))?.text!!
+        webElement.findElement(By.xpath("a//strong[@class='class-time']")).text
     }
 
-    val bookingLink: String? by lazy {
-        webElement.findElement(By.xpath("a"))?.getAttribute("href")
+    val bookingLink: String by lazy {
+        webElement.findElement(By.xpath("a")).getAttribute("href")
     }
 
     val date: LocalDateTime by lazy {
