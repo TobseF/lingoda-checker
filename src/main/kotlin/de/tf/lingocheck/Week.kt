@@ -5,9 +5,9 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-open class Week(start: LocalDate) {
+open class Week(val startDate: LocalDate) {
 
-    val start = getWeek(start)
+    val start = getWeek(startDate)
 
     companion object {
         fun getWeek(date: LocalDate): LocalDate = date.minusDays(date.dayOfWeek.value - 1L)
@@ -39,6 +39,10 @@ open class Week(start: LocalDate) {
     override fun hashCode(): Int {
         return start.hashCode()
     }
+
+    override fun toString(): String {
+        return startDate.toString()
+    }
 }
 
 fun listBookingWeeks(dates: Collection<LocalDateTime>): List<BookingWeek> {
@@ -58,4 +62,5 @@ fun Collection<LocalDate>.toWeeks(): Set<Week> {
 fun Collection<LocalDateTime>.toDates(): List<LocalDate> {
     return this.map { it.toLocalDate() }
 }
+
 

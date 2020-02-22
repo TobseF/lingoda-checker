@@ -1,6 +1,6 @@
 package de.tf.lingocheck
 
-fun main(args: Array<String>) {
+suspend fun main() {
     //SearchCourses().findCoursesByCommitNumber()
-    SearchCoursesInCalendar().findCoursesByCalendar()
+    SearchCoursesInCalendar().runFindCoursesByCalendar().join()
 }

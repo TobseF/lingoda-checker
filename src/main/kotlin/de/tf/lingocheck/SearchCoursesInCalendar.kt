@@ -7,26 +7,60 @@ import de.tf.lingocheck.page.element.CourseCard
 import de.tf.lingocheck.util.BookingHistoryCourse
 import de.tf.lingocheck.util.Configs
 import de.tf.lingocheck.util.createDriver
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.openqa.selenium.WebDriver
+import kotlin.system.measureTimeMillis
 
 
 class SearchCoursesInCalendar {
 
+    companion object {
+        val log = KotlinLogging.logger("SearchCoursesInCalendar")
+    }
+
+    private var job: Job = Job()
+
+    var started = false
+        private set
+
+    fun runFindCoursesByCalendar(): Job {
+        job = GlobalScope.launch {
+            findCoursesByCalendar()
+        }
+        return job
+    }
+
     fun findCoursesByCalendar() {
+        started = true
 
-        val weeks = listBookingWeeks(Whitelist.getUnbooked())
-
+        val coursesToBook = Whitelist.getUnbooked()
+        val weeks = listBookingWeeks(coursesToBook)
         val courses = weeks.map { CourseSearch(it) }.toMutableList()
+        val initalCourses = courses.size
 
-        while (courses.isNotEmpty()) {
-            courses.forEach { course ->
-                course.apply {
-                    searchCourses()
-                    refresh()
+        log.info { "Staring search courses loop for: \n$courses" }
+        while (job.isActive && courses.isNotEmpty()) {
+            log.info { "Staring search for ${courses.size}/$initalCourses courses " }
+            val time = measureTimeMillis {
+                courses.forEach { course ->
+                    course.apply {
+                        searchCourses()
+                        refresh()
+                    }
                 }
             }
+            log.info { "Search for ${coursesToBook} courses took $time ms" }
             courses.removeIf { it.hasNoCoursesToBook() }
         }
+    }
+
+    fun isStarted() = !job.isCancelled && !job.isCompleted
+
+    fun stop() {
+        job.cancel()
     }
 
     class CourseSearch(val week: BookingWeek) {
@@ -72,10 +106,14 @@ class SearchCoursesInCalendar {
 
         private fun login() {
             val classesPageAfterLogin = HomePage(driver).login()
-            println("Login successful")
-            println("Hallo " + classesPageAfterLogin.getUserName())
+            log.info { "Login successful" }
+            log.info { "Hallo ${classesPageAfterLogin.getUserName()}" }
             driver.navigate().to(week.getDateUrl())
             loggedIn = true
+        }
+
+        override fun toString(): String {
+            return week.toString()
         }
 
     }

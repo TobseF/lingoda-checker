@@ -15,6 +15,7 @@ open class BookingHistory<T : BookedCourse>(val parser: (String) -> T, val write
         }.toMutableList()
     }
 
+    @Synchronized
     fun bookCourse(course: T) {
         courses.add(course)
         write()
