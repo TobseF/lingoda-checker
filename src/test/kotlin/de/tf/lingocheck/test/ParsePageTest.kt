@@ -22,7 +22,7 @@ class ParsePageTest {
         assertEquals("2:00vorm.", firstCourse.classTime)
         assertEquals("Group class", firstCourse.type)
         assertEquals("Topic: Immer wieder 'hätte'", firstCourse.topic)
-        assertEquals("/teacher/classes/commit/895338", firstCourse.bookingLink?.webLink())
+        assertEquals("/teacher/classes/commit/895338", firstCourse.bookingLink.webLink())
 
         val coursesDay2 = classesPage.findCoursesOnDay(2, LocalDate.of(2019, 1, 29))
         assertEquals(coursesDay2.size, 2)
@@ -48,6 +48,7 @@ class ParsePageTest {
     fun courseTimeStampTest() {
         assertEquals(2, parseCourseTime("2:00vorm."))
         assertEquals(14, parseCourseTime("2:00nachm."))
+        assertEquals(12, parseCourseTime("12:00nachm."))
     }
 
     fun String?.webLink() = this?.substringAfter("file:///C:")

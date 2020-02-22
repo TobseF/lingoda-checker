@@ -66,6 +66,10 @@ fun parseCourseTime(dateText: String): Int {
     if (dateText.contains("nachm.")) {
         time += 12
     }
+    if (time == 24) {
+        // so we can parse 12:00nachm.
+        return 12
+    }
     return time
 }
 
