@@ -15,10 +15,10 @@ import org.openqa.selenium.WebDriver
 import kotlin.system.measureTimeMillis
 
 
-class SearchCoursesInCalendar {
+class CalendarSearch {
 
     companion object {
-        val log = KotlinLogging.logger("SearchCoursesInCalendar")
+        val log = KotlinLogging.logger("CalendarSearch")
     }
 
     private var job: Job = Job()
@@ -39,11 +39,13 @@ class SearchCoursesInCalendar {
         val coursesToBook = Whitelist.getUnbooked()
         val weeks = listBookingWeeks(coursesToBook)
         val courses = weeks.map { CourseSearch(it) }.toMutableList()
-        val initalCourses = courses.size
+        val initialCourses = courses.size
+        fun coursesTable() = courses.joinToString("\n")
 
-        log.info { "Staring search courses loop for: \n$courses" }
+        log.info { "Starting search courses loop for $initialCourses courses: \n${coursesTable()}" }
         while (job.isActive && courses.isNotEmpty()) {
-            log.info { "Staring search for ${courses.size}/$initalCourses courses " }
+            log.info { "Starting search for ${courses.size}/$initialCourses courses " }
+            log.debug { "Courses:\n ${coursesTable()}" }
             val time = measureTimeMillis {
                 courses.forEach { course ->
                     course.apply {
@@ -52,7 +54,7 @@ class SearchCoursesInCalendar {
                     }
                 }
             }
-            log.info { "Search for ${coursesToBook} courses took $time ms" }
+            log.info { "Search for ${courses.size} courses took $time ms" }
             courses.removeIf { it.hasNoCoursesToBook() }
         }
     }
