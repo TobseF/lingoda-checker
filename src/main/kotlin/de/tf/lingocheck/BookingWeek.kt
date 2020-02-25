@@ -4,15 +4,15 @@ import de.tf.lingocheck.util.Configs
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
 
 
 class BookingWeek(val week: Week, val courses: MutableList<LocalDateTime>) : Week(week.start) {
 
     companion object {
-        private var toStringFormatter = DateTimeFormatter.ofPattern("HH:mm")
-        private var toStringFormatterDate = DateTimeFormatter.ofPattern("EEE dd.MM")
-        private fun LocalDateTime.formatted(): String = toStringFormatter.format(this)
-        private fun LocalDate.formatted(): String = toStringFormatterDate.format(this)
+        private var toStringFormatterDate = DateTimeFormatter.ofPattern("EEE dd.MM HH:mm")
+        private fun LocalDate.week(): Int = this.get(WeekFields.ISO!!.weekOfWeekBasedYear())
+        private fun LocalDateTime.formatted(): String = toStringFormatterDate.format(this)
     }
 
     fun getDateUrl(): String {
@@ -22,7 +22,7 @@ class BookingWeek(val week: Week, val courses: MutableList<LocalDateTime>) : Wee
     }
 
     override fun toString(): String {
-        return startDate.formatted() + " " + courses.map { it.formatted() }
+        return "Week ${startDate.week()}: " + courses.map { it.formatted() }
     }
 
 }
