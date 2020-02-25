@@ -6,6 +6,7 @@ import de.tf.lingocheck.test.util.getResource
 import de.tf.lingocheck.util.createDriver
 import org.junit.Test
 import java.time.LocalDate
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
 class ParsePageTest {
@@ -13,6 +14,8 @@ class ParsePageTest {
     @Test
     fun parseCourseTest() {
         val driver = createDriver()
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.MILLISECONDS)
+
         val coursedPage = getResource(this::class, "courses-page.html")
         driver.get(coursedPage.toString())
         val classesPage = ClassesPage(driver)

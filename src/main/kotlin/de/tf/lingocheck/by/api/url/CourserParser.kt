@@ -6,10 +6,10 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-val formatter = DateTimeFormatter.ofPattern("yyyy MMMM dd, HH:mm", Locale.GERMAN)
+val formatter = DateTimeFormatter.ofPattern("yyyy MMM dd, HH:mm", Locale.GERMAN)
 
 fun parseDate(dateAsText: String, defaultYear: String): LocalDateTime {
-    val year = defaultYear + " " + dateAsText.replace(".", "").trim().substringAfter(" ")
+    val year = defaultYear + " " + dateAsText.trim().substringAfter(" ")
     return LocalDateTime.parse(year, formatter)!!
 }
 
