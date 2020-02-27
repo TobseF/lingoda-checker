@@ -1,5 +1,6 @@
 package de.tf.lingocheck.page.element
 
+import de.tf.lingocheck.util.formatted
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -39,7 +40,7 @@ class CourseCard(webElement: WebElement, driver: WebDriver, startDay: LocalDate)
     }
 
     override fun toString(): String {
-        return "Course($date: $type - $topic ($bookingLink)"
+        return "Course(${date.formatted()}: $type - $topic ($bookingLink)"
     }
 
     fun commit() {

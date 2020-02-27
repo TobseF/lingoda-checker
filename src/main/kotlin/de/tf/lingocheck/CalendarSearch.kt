@@ -39,12 +39,12 @@ class CalendarSearch {
         val coursesToBook = Whitelist.getUnbooked()
         val weeks = listBookingWeeks(coursesToBook)
         val courses = weeks.map { CourseSearch(it) }.toMutableList()
-        val initialCourses = courses.size
+        val initialCourses = courses.numberOfCourses()
         fun coursesTable() = courses.joinToString("\n")
 
-        log.info { "Starting search courses loop for $initialCourses courses: \n${coursesTable()}" }
+        log.debug { "Starting search courses loop for $initialCourses courses: \n${coursesTable()}" }
         while (job.isActive && courses.isNotEmpty()) {
-            log.info { "Starting search for ${courses.size}/$initialCourses courses " }
+            log.debug { "Starting search for ${courses.numberOfCourses()}/$initialCourses courses " }
             log.debug { "Courses:\n ${coursesTable()}" }
             val time = measureTimeMillis {
                 courses.forEach { course ->
@@ -54,10 +54,12 @@ class CalendarSearch {
                     }
                 }
             }
-            log.info { "Search for ${courses.size} courses took $time ms" }
+            log.debug { "Search for ${courses.numberOfCourses()} courses took $time ms" }
             courses.removeIf { it.hasNoCoursesToBook() }
         }
     }
+
+    fun List<CourseSearch>.numberOfCourses() = this.map { it.week.courses.size }.sum()
 
     fun isStarted() = !job.isCancelled && !job.isCompleted
 
@@ -86,7 +88,7 @@ class CalendarSearch {
         fun hasNoCoursesToBook() = week.courses.isEmpty()
 
         private fun bookCourse(course: CourseCard) {
-            println("Booking course: $course")
+            log.info { "Booking course: $course" }
             course.commit()
             BookingHistoryCourse.bookCourse(course.toCourse())
             week.courses.remove(course.date)
