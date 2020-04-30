@@ -47,15 +47,17 @@ class CalendarSearch {
             log.debug { "Starting search for ${courses.numberOfCourses()}/$initialCourses courses " }
             log.debug { "Courses:\n ${coursesTable()}" }
             val time = measureTimeMillis {
-                courses.forEach { course ->
-                    course.apply {
-                        searchCourses()
-                        refresh()
-                    }
-                }
+                courses.forEach(this::searchCourse)
             }
             log.debug { "Search for ${courses.numberOfCourses()} courses took $time ms" }
             courses.removeIf { it.hasNoCoursesToBook() }
+        }
+    }
+
+    private fun searchCourse(course: CourseSearch) {
+        course.apply {
+            searchCourses()
+            refresh()
         }
     }
 

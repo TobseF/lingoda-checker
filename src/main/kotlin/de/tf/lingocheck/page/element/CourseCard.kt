@@ -1,6 +1,7 @@
 package de.tf.lingocheck.page.element
 
 import de.tf.lingocheck.util.formatted
+import de.tf.lingocheck.util.retryWithLongTimeout
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -12,7 +13,7 @@ import java.time.LocalDateTime
  */
 class CourseCard(webElement: WebElement, driver: WebDriver, startDay: LocalDate) : Component(webElement, driver) {
 
-    val type: String  by lazy {
+    val type: String by lazy {
         webElement.findElement(By.xpath("a//h3")).text
     }
 
@@ -45,7 +46,10 @@ class CourseCard(webElement: WebElement, driver: WebDriver, startDay: LocalDate)
 
     fun commit() {
         action.click()
-        getCommitButton().click()
+        Thread.sleep(200)
+        driver.retryWithLongTimeout(refreshOnError = true) {
+            getCommitButton().click()
+        }
     }
 
     fun getCommitButton(): WebElement {

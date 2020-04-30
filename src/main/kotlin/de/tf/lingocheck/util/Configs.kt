@@ -29,4 +29,7 @@ object Configs {
     val exeDriver: String by lazy { getProperty("exeDriver") }
     val pathDriver: String by lazy { getProperty("pathDriver") }
     val commitUrl: String by lazy { getProperty("commitUrl") }
+
+    val timeOutDefault = 1600L
+    val timeOutLong = 6500L
 }
